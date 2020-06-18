@@ -9,6 +9,9 @@ import android.widget.SeekBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
     private final static String TAG = MainActivity.class.getSimpleName();
 
@@ -18,6 +21,11 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     private Cube cube;
     private Pyramid pyramid;
 
+    private Timer mTimer = new Timer();
+    private int angleX = 0;
+    private int angleY = 0;
+    private int angleZ = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +33,9 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         setContentView(R.layout.activity_main);
 
         glView = findViewById(R.id.gl_view);
-        SeekBar seekBarX = findViewById(R.id.seekbar_x);
-        SeekBar seekBarY = findViewById(R.id.seekbar_y);
-        SeekBar seekBarZ = findViewById(R.id.seekbar_z);
+        final SeekBar seekBarX = findViewById(R.id.seekbar_x);
+        final SeekBar seekBarY = findViewById(R.id.seekbar_y);
+        final SeekBar seekBarZ = findViewById(R.id.seekbar_z);
         seekBarX.setMax(360);
         seekBarY.setMax(360);
         seekBarZ.setMax(360);
@@ -40,6 +48,27 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         pyramid = new Pyramid();
         renderer.setObj(cube);
         glView.setRenderer(renderer);
+
+        TimerTask mTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                angleX += 10;
+                angleX %= 360;
+
+                angleY += 20;
+                angleY %= 360;
+
+                angleZ += 30;
+                angleZ %= 360;
+
+                seekBarX.setProgress(angleX);
+                seekBarY.setProgress(angleY);
+                seekBarZ.setProgress(angleZ);
+            }
+        };
+        double timeInterval = 0.1;
+        mTimer.schedule(mTimerTask, 1000, (int)(timeInterval * 1000));
+
     }
 
     @Override
@@ -98,5 +127,11 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy( );
+        mTimer.cancel();
     }
 }

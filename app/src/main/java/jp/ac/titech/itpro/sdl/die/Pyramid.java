@@ -43,7 +43,7 @@ public class Pyramid implements Obj {
         vbuf.position(0);
     }
 
-    @Override
+
     public void draw(GL10 gl) {
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vbuf);

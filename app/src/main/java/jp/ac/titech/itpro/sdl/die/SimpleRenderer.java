@@ -7,6 +7,7 @@ import android.util.Log;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+
 public class SimpleRenderer implements GLSurfaceView.Renderer {
     private final static String TAG = SimpleRenderer.class.getSimpleName();
 
